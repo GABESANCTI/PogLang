@@ -1,0 +1,8 @@
+start {
+    var x: Int = 5;
+    var y: Int = 10;
+    println(x + y);
+
+    val nome: String = "pog!";
+    println(nome);
+} end
