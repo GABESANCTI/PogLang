@@ -2,13 +2,13 @@
 
 Este é um pequeno projeto desenvolvido para a disciplina de Compiladores do curso de Eng. de Computação.
 
-A linguagem utilizada se chama **Poglin** (anteriormente chamada de PogLang), e é inspirada na sintaxe do Kotlin.  
-Atualmente, o compilador implementa as etapas de:
+A linguagem criada se chama **Poglin** (anteriormente chamada de PogLang), e é inspirada na sintaxe do Kotlin.  
+Atualmente, o compilador consegue realizar as etapas de:
 
 - Análise Léxica (Lexer)
 - Análise Sintática (Parser)
 
-Outras etapas como análise semântica, geração de código ou execução ainda estão em desenvolvimento.
+
 
 ## Objetivo
 
