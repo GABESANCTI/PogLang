@@ -1,0 +1,57 @@
+
+
+// analisador léxico e Sintático//
+
+Especificação da Gramática
+
+Projete uma gramática que inclua no mínimo:
+
+Tipos de dados: Dois tipos primitivos (ex: int , string );
+
+Entrada/saída: Comandos leia() e escreva() ;
+
+Controle de fluxo:
+
+Condicional: se...então...senão ;
+
+Repetição: enquanto...faça ;
+
+Expressões:
+
+Aritméticas com parênteses e operadores +, -, *, / ;
+
+Lógicas com quatro operadores (ex: && , || , ! , == )
+
+
+
+
+Sugestões:
+Utilize Gramática LL(1);
+Remova as ambiguidades;
+Remova recursão à esquerda;
+Aplique fatoração.
+Analisador Léxico
+
+
+
+Implemente um scanner que:
+1. Processe arquivo-fonte e gere tokens no formato: <Tipo do Token, Lexema, Linha, Coluna>;
+
+2. Registre logs detalhados em arquivo texto e/ou tela;
+
+3. Reporte erros com formato:
+
+ERRO LÉXICO [Linha 5, Coluna 12]: Símbolo '#' inválido 
+
+
+Analisador Sintático
+Desenvolva um parser que:
+1. Gere uma AST em formato visualizável (ex: DOT/Graphviz);
+2. Valide a estrutura do código-fonte conforme a gramática;
+3. Trate erros com mensagens intuitivas:
+ERRO SINTÁTICO [Linha 8, Coluna 3]: Esperado ';', encontrado '}' .
+
+Requisito técnico:
+Deve consumir os tokens gerados pelo analisador léxico;
+
+//analisador semantico //

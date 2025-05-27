@@ -1,0 +1,20 @@
+start {
+    val a: Int = 3;
+    val b: Int = 4;
+    val c: Int = 5;
+
+    if (a + b > c && a + c > b && b + c > a) {
+        if (a == b && b == c) {
+            println("Triangulo equilatero valido");
+        } else {
+            if (a == b || a == c || b == c) {
+                println("Triangulo isosceles valido");
+            } else {
+                println("Triangulo escaleno valido");
+            }
+        }
+    } else {
+        println("Medias invalidas");
+    }
+}
+end

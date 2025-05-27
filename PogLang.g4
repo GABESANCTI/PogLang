@@ -1,6 +1,6 @@
 grammar PogLang;
 
-// === Palavras-chave ===
+// Palavras-chave 
 START: 'start';
 END: 'end';
 VAL: 'val';
@@ -14,7 +14,7 @@ POG: 'pog';
 INT_TYPE: 'Int';
 STRING_TYPE: 'String';
 
-// === Operadores e símbolos ===
+// Operadores e símbolos 
 PLUS: '+';
 MINUS: '-';
 MULT: '*';
@@ -39,16 +39,14 @@ SEMI: ';';
 COLON: ':';
 ASSIGN: '=';
 
-// === Tokens ===
 ID: [a-zA-Z_][a-zA-Z_0-9]* ;
 INT: [0-9]+ ;
 STRING: '"' ( ~["\\\r\n] | '\\' . )* '"' ;
 
-// === Espaços e comentários ===
 WS: [ \t\r\n]+ -> skip ;
 COMMENT: '//' ~[\r\n]* -> skip ;
 
-// === Regras principais ===
+// Regras principais
 program: START LBRACE statement* RBRACE END ;
 
 statement
@@ -62,16 +60,42 @@ statement
     | POG SEMI
     ;
 
-expression
-    : expression op=(MULT | DIV) expression
-    | expression op=(PLUS | MINUS) expression
-    | expression op=(EQUALS | NEQUALS | LT | LTE | GT | GTE) expression
-    | expression op=(AND | OR) expression
-    | NOT expression
-    | LPAREN expression RPAREN
-    | ID
-    | INT
+expression: logicalOrExpression ;
+
+logicalOrExpression
+    : logicalAndExpression (OR logicalAndExpression)*
+    ;
+
+logicalAndExpression
+    : equalityExpression (AND equalityExpression)*
+    ;
+
+equalityExpression
+    : relationalExpression ((EQUALS | NEQUALS) relationalExpression)*
+    ;
+
+relationalExpression
+    : additiveExpression ((LT | LTE | GT | GTE) additiveExpression)*
+    ;
+
+additiveExpression
+    : multiplicativeExpression ((PLUS | MINUS) multiplicativeExpression)*
+    ;
+
+multiplicativeExpression
+    : unaryExpression ((MULT | DIV) unaryExpression)*
+    ;
+
+unaryExpression
+    : NOT unaryExpression
+    | primary
+    ;
+
+primary
+    : INT
     | STRING
+    | ID
+    | LPAREN expression RPAREN
     ;
 
 type: INT_TYPE | STRING_TYPE ;

@@ -1,33 +1,91 @@
-# Generated from PogLang.g4 by ANTLR 4.13.2
-from antlr4 import *
-if "." in __name__:
-    from .PogLangParser import PogLangParser
-else:
-    from PogLangParser import PogLangParser
+class PogLangVisitor:
+    def __init__(self):
+        self.memory = {}
+        self.errors = []
 
-# This class defines a complete generic visitor for a parse tree produced by PogLangParser.
+    def log(self, msg):
+        print(f"[SEMÂNTICO] {msg}")
 
-class PogLangVisitor(ParseTreeVisitor):
+    def visitProgram(self, ctx):
+        self.log("Visitando programa")
+        for child in ctx.children:
+            self.visit(child)
+        if self.errors:
+            print("\nErros encontrados:")
+            for e in self.errors:
+                print(e)
+        else:
+            print("\nExecução finalizada com sucesso.")
+            print("Memória final:", self.memory)
 
-    # Visit a parse tree produced by PogLangParser#program.
-    def visitProgram(self, ctx:PogLangParser.ProgramContext):
-        return self.visitChildren(ctx)
+    def visitDeclaration(self, ctx):
+        var_name = ctx.ID().getText()
+        self.log(f"Declarando variável '{var_name}'")
+        if var_name in self.memory:
+            self.errors.append(f"[Erro Semântico] Variável '{var_name}' declarada duas vezes.")
+        else:
+            self.memory[var_name] = None
 
+    def visitAssignment(self, ctx):
+        var_name = ctx.ID().getText()
+        self.log(f"Atribuindo valor à variável '{var_name}'")
+        if var_name not in self.memory:
+            self.errors.append(f"[Erro Semântico] Variável '{var_name}' não declarada.")
+            return
+        value = self.visit(ctx.expr())
+        self.memory[var_name] = value
 
-    # Visit a parse tree produced by PogLangParser#statement.
-    def visitStatement(self, ctx:PogLangParser.StatementContext):
-        return self.visitChildren(ctx)
+    def visitPrint(self, ctx):
+        value = self.visit(ctx.expr())
+        print(f">>> {value}")
 
+    def visitExpr(self, ctx):
+        if ctx.INT():
+            return int(ctx.INT().getText())
+        elif ctx.ID():
+            var_name = ctx.ID().getText()
+            if var_name not in self.memory:
+                self.errors.append(f"[Erro Semântico] Variável '{var_name}' não declarada.")
+                return None
+            val = self.memory[var_name]
+            if val is None:
+                self.errors.append(f"[Erro Semântico] Variável '{var_name}' sem valor atribuído.")
+            return val
+        elif ctx.getChildCount() == 3:
+            left = self.visit(ctx.expr(0))
+            op = ctx.getChild(1).getText()
+            right = self.visit(ctx.expr(1))
 
-    # Visit a parse tree produced by PogLangParser#expression.
-    def visitExpression(self, ctx:PogLangParser.ExpressionContext):
-        return self.visitChildren(ctx)
+            if left is None or right is None:
+                return None
 
+            if not isinstance(left, int) or not isinstance(right, int):
+                self.errors.append(f"[Erro Semântico] Operação inválida com tipos: {left} e {right}")
+                return None
 
-    # Visit a parse tree produced by PogLangParser#type.
-    def visitType(self, ctx:PogLangParser.TypeContext):
-        return self.visitChildren(ctx)
+            if op == '+':
+                return left + right
+            elif op == '-':
+                return left - right
+            elif op == '*':
+                return left * right
+            elif op == '/':
+                if right == 0:
+                    self.errors.append("[Erro Semântico] Divisão por zero.")
+                    return None
+                return left // right
+        elif ctx.expr():
+            return self.visit(ctx.expr(0))
 
+    def visit(self, ctx):
+        method_name = 'visit' + type(ctx).__name__.replace('Context', '')
+        visitor = getattr(self, method_name, self.visitChildren)
+        return visitor(ctx)
 
-
-del PogLangParser
+    def visitChildren(self, ctx):
+        result = None
+        for child in ctx.getChildren():
+            res = self.visit(child)
+            if res is not None:
+                result = res
+        return result

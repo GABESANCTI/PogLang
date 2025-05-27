@@ -1,0 +1,10 @@
+start {
+    var x: Int = 10;
+    val y: Int = 20;
+    var x: Int = 30; // ERRO: variável duplicada
+
+    z = 5;           // ERRO: variável não declarada
+
+    println(x);
+}
+end

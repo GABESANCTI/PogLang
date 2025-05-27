@@ -1,0 +1,6 @@
+start {
+    val a: Int = 6;
+    println("teste");
+    println(a);
+    pog;}
+end

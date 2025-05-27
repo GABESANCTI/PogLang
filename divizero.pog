@@ -1,0 +1,9 @@
+start {
+    var a: Int = 10;
+    var b: Int = 0;
+
+    var c: Int = a / 0; // divisão por zero
+
+    println(c);
+}
+end
