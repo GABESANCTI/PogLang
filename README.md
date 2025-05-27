@@ -7,6 +7,7 @@ Atualmente, o compilador consegue realizar as etapas de:
 
 - Análise Léxica (Lexer)
 - Análise Sintática (Parser)
+- Análise semântica
 
 
 
